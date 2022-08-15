@@ -1,5 +1,5 @@
 @echo off
-call isInteger %1 isint
+call :isInteger %1 isint
 if %isint% == true goto :main
 echo Correct use: call rot places returnVar str
 goto :eof
@@ -9,11 +9,15 @@ setlocal enableDelayedexpansion
 set returnString=
 set pos=0
 set str=%~3
-:rotNextChar    
-    call :rotChar rt !str:~%pos%,1! %1 
+:rotNextChar
+    if "!str:~%pos%,1!" NEQ " " (
+        call :rotChar rt "!str:~%pos%,1!" %1 
+    ) else (
+        set rt= 
+    )
     set returnString=!returnString!!rt!
     set /a pos=pos+1
-    if "!str:~%pos%,1!" NEQ "" goto rotNextChar
+    if "!str:~%pos%,1!" NEQ "" goto :rotNextChar
 endlocal & set %2=%returnString%
 goto :eof
 
@@ -27,7 +31,7 @@ set lowercase=a b c d e f g h i j k l m n o p q r s t u v w x y z
 set uppercaseNoSpace=ABCDEFGHIJKLMNOPQRSTUVWXYZ
 set lowercaseNoSpace=abcdefghijklmnopqrstuvwxyz
 set /a places=%3
-call isInteger %2 isintz
+call :isInteger %2 isintz
 if !isintz! == true goto :rotCharEnd
 call :isUppercase isupz %2
 if !isupz! == true goto :rotCharUppercase
@@ -39,7 +43,7 @@ goto :rotCharLowerCase
 	set /a newPlace=pos+places
 	if !newPlace! gtr 26 set /a newPlace-=26
 	for %%a in (!uppercase!) do ( 
-		if !i! == !newPlace! set rotated=%%a
+		if "!i!" EQU "!newPlace!" set rotated=%%a
 		set /a i+=1
 	)
 	goto :rotCharEnd
@@ -49,7 +53,7 @@ goto :rotCharLowerCase
 	set /a newPlace=pos+places
 	if !newPlace! gtr 26 set /a newPlace-=26
 	for %%a in (!lowercase!) do ( 
-		if !i! == !newPlace! set rotated=%%a
+		if "!i!" EQU "!newPlace!" set rotated=%%a
 		set /a i+=1
 	)
 	goto :rotCharEnd
@@ -63,9 +67,9 @@ set pos=0
 set mytext=%3
 set /a retrn=0
 :getposNextChar    
-    if "!mytext:~%pos%,1!" == "%2" set retrn=%pos%
+    if "!mytext:~%pos%,1!" == "%~2" set retrn=%pos%
     set /a pos=pos+1
-    if "!mytext:~%pos%,1!" NEQ "" goto getposNextChar
+    if "!mytext:~%pos%,1!" NEQ "" goto :getposNextChar
 endlocal & set %1=%retrn%
 goto :eof
 
@@ -74,7 +78,32 @@ setlocal enabledelayedexpansion
 set uppercase=false
 set up=Q W E R T Y U I O P A S D F G H J K L Z X C V B N M
 for %%a in (%up%) do ( 
-	if %2==%%a set uppercase=true
+	if %2=="%%a" set uppercase=true
 )
 endlocal & set %1=%uppercase%
 goto :eof
+
+REM Taken from https://github.com/npocmaka/batch.scripts
+:isInteger  input [returnVar] 
+setlocal enableDelayedexpansion 
+set "input=%~1" 
+
+if "!input:~0,1!" equ "-" (
+	set "input=!input:~1!"
+) else (
+	if "!input:~0,1!" equ "+" set "input=!input:~1!"
+)
+
+for %%# in (1 2 3 4 5 6 7 8 9 0) do ( 
+        if not "!input!" == "" ( 
+                set "input=!input:%%#=!" 
+    )         
+) 
+
+if "!input!" equ "" ( 
+        set result=true 
+) else ( 
+        set result=false 
+) 
+
+endlocal & if "%~2" neq "" (set %~2=%result%) else echo %result% 
