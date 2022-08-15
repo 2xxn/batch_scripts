@@ -9,11 +9,16 @@ setlocal enableDelayedexpansion
 set returnString=
 set pos=0
 set str=%~3
+set uppercase=A B C D E F G H I J K L M N O P Q R S T U V W X Y Z
+set lowercase=a b c d e f g h i j k l m n o p q r s t u v w x y z
+set uppercaseNoSpace=ABCDEFGHIJKLMNOPQRSTUVWXYZ
+set lowercaseNoSpace=abcdefghijklmnopqrstuvwxyz
 :rotNextChar
-    if "!str:~%pos%,1!" NEQ " " (
+    call :shouldRot shR "!str:~%pos%,1!"
+    if "!shR!" EQU "1" (
         call :rotChar rt "!str:~%pos%,1!" %1 
     ) else (
-        set rt= 
+        set rt=!str:~%pos%,1!
     )
     set returnString=!returnString!!rt!
     set /a pos=pos+1
@@ -26,10 +31,6 @@ goto :eof
 :rotChar rotatedVar toRotate places
 setlocal enableDelayedexpansion
 set rotated=%2
-set uppercase=A B C D E F G H I J K L M N O P Q R S T U V W X Y Z
-set lowercase=a b c d e f g h i j k l m n o p q r s t u v w x y z
-set uppercaseNoSpace=ABCDEFGHIJKLMNOPQRSTUVWXYZ
-set lowercaseNoSpace=abcdefghijklmnopqrstuvwxyz
 set /a places=%3
 call :isInteger %2 isintz
 if !isintz! == true goto :rotCharEnd
@@ -81,6 +82,14 @@ for %%a in (%up%) do (
 	if %2=="%%a" set uppercase=true
 )
 endlocal & set %1=%uppercase%
+goto :eof
+
+:shouldRot returnVar char
+setlocal enabledelayedexpansion
+set shRot=0
+for %%x in (!uppercase!) do if "%%x" EQU "%~2" set shRot=1
+for %%x in (!lowercase!) do if "%%x" EQU "%~2" set shRot=1
+endlocal & set %1=%shRot%
 goto :eof
 
 REM Taken from https://github.com/npocmaka/batch.scripts
