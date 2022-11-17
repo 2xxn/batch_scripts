@@ -49,6 +49,7 @@ if !exists! equ 0 (
     )
     call :deleteVPNprofile %~1
     echo VPN has been disconnected
+    pause
 )
 endlocal
 goto :eof
