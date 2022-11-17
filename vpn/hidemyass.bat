@@ -1,4 +1,7 @@
 @echo off
+@REM This batch script is basically L2TP/IPSec windows VPN connection made easier and exclusive for HMA VPN
+@REM For it to work you'll need a HMA subscription (username + IPSec password)
+@REM https://support.hidemyass.com/hc/en-us/articles/202723606-Windows-7-10-L2TP-connection-setup-
 title HMA Batch VPN
 set baseURL=.hma.rocks
 set countries=ad ae af ag ai al am ao ar as at au aw ax az ba bb bd be bf bg bh bi bj bm bn bo br bs bt bw by bz ca cc cd cf cg ch ci ck cl cm cn co cr cu cv cx cy cz de dj dk dm do dz ec ee eg er es et fi fj fk fo fr ga gb gd ge gh gi gl gm gn gp gq gr gt gu gw gy hk hn hr ht hu id ie il in iq ir is it jm jo jp ke kg kh ki km kn kp kr kw ky kz la lb lc li lk lr ls lt lu lv ly ma mc md me mg mk ml mm mn mo ms mt mu mv mw mx my mz na nc ne nf ng ni nl no np nr nu nz om pa pe pg ph pk pl pm pn pr ps pt pw py qa ro rs ru rw sa sb sd se sg sh si sj sk sm sn so sr st sv sy sz tc td tg th tj tk tm tn to tr tt tv tw tz ua ug us uy uz va vc ve vg vn vu ws ye za zm zw
